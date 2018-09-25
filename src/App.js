@@ -8,31 +8,42 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      videoUrl: null
+      channelId: null,
+      description: null,
+      id: null,
+      link: null,
+      title: null,
+      value: null
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     var opts = {
-      maxResults: 20,
+      maxResults: 10,
       key: process.env.REACT_APP_API_KEY
     };
 
-    Search("jsconf", opts, function(err, results) {
+    Search(`${this.state.value}`, opts, (err, results) => {
       if (err) return console.log(err);
+      let firstResult = results[0];
 
-      let randomVideo = results[Math.floor(Math.random() * results.length)];
+      this.setState({
+        channelId: firstResult.channelId,
+        description: firstResult.description,
+        id: firstResult.id,
+        link: firstResult.link,
+        title: firstResult.title
+      });
     });
-
-    // this.setState({
-    //   videoURL: this.randomVideo
-    // });
-  }
+  };
 
   handleSearch = event => {
     event.preventDefault();
-    let value = event.target.value;
-    console.log(value);
+    console.log(event.target.value);
+
+    this.setState({
+      value: event.target.value
+    });
   };
 
   render() {
@@ -40,7 +51,7 @@ class App extends Component {
       <div className="main-container">
         <SearchBar handleSearch={this.handleSearch} />
         <div className="media">
-          <MediaPlayer />
+          <MediaPlayer source={this.state.link} />
         </div>
       </div>
     );
