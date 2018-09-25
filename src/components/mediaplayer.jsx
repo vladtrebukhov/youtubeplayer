@@ -11,12 +11,16 @@ import {
 const { PlayPause, MuteUnmute } = controls;
 
 class MediaPlayer extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <Media>
         <div className="media">
           <div className="media-player">
-            <Player src="http://www.youtube.com/embed/h3YVKTxTOgU" />
+            <Player src={this.props.source} />
           </div>
           <div className="media-controls">
             <CurrentTime />
