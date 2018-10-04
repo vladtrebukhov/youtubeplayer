@@ -13,36 +13,32 @@ class App extends Component {
       id: null,
       link: null,
       title: null,
-      value: null
+      value: null,
+      allResults: null
     };
   }
 
-  componentDidMount = () => {
-    var opts = {
-      maxResults: 10,
-      key: process.env.REACT_APP_API_KEY
-    };
+  handleSearch = userInput => {
+    //userInput from createSearch in searchbar component
+    var opts = { maxResults: 10, key: process.env.REACT_APP_API_KEY };
+    console.log(userInput.input);
 
-    Search(`${this.state.value}`, opts, (err, results) => {
+    //Youtube Search custom API (search input, options, (callback function with results))
+    Search(`${userInput.input}`, opts, (err, results) => {
       if (err) return console.log(err);
-      let firstResult = results[0];
 
+      let firstResult = results[0];
+      console.log(results);
+      console.log(results[0].id);
+      console.log(results[0].link);
       this.setState({
         channelId: firstResult.channelId,
         description: firstResult.description,
         id: firstResult.id,
         link: firstResult.link,
-        title: firstResult.title
+        title: firstResult.title,
+        allResults: results
       });
-    });
-  };
-
-  handleSearch = event => {
-    event.preventDefault();
-    console.log(event.target.value);
-
-    this.setState({
-      value: event.target.value
     });
   };
 
