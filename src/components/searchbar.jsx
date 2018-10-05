@@ -16,7 +16,6 @@ class SearchBar extends React.Component {
     return (
       <form
         ref={input => (this.inputForm = input)}
-        //cannot directly call a function within
         onSubmit={this.createSearch}
         className="search-form"
       >
