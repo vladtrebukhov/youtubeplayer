@@ -3,6 +3,7 @@ import SearchBar from "./components/searchbar.jsx";
 import "./App.css";
 import MediaPlayer from "./components/mediaplayer";
 import Search from "youtube-search";
+import SearchResults from "./components/searchresults.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -18,10 +19,15 @@ class App extends Component {
     };
   }
 
+  handleLinkClick = link => {
+    this.setState({
+      link: link
+    });
+  };
+
   handleSearch = userInput => {
     //userInput from createSearch in searchbar component
     var opts = { maxResults: 10, key: process.env.REACT_APP_API_KEY };
-    console.log(userInput.input);
 
     //Youtube Search custom API (search input, options, (callback function with results))
     Search(`${userInput.input}`, opts, (err, results) => {
@@ -29,8 +35,7 @@ class App extends Component {
 
       let firstResult = results[0];
       console.log(results);
-      console.log(results[0].id);
-      console.log(results[0].link);
+
       this.setState({
         channelId: firstResult.channelId,
         description: firstResult.description,
@@ -45,9 +50,18 @@ class App extends Component {
   render() {
     return (
       <div className="main-container">
-        <SearchBar handleSearch={this.handleSearch} />
+        <div className="search">
+          <SearchBar handleSearch={this.handleSearch} />
+        </div>
         <div className="media">
           <MediaPlayer source={this.state.link} />
+        </div>
+        <div className="results">
+          <SearchResults
+            key={this.state.id}
+            handleLinkClick={this.handleLinkClick}
+            results={this.state.allResults}
+          />
         </div>
       </div>
     );
